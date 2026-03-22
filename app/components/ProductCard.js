@@ -50,7 +50,7 @@ export default function ProductCard({ product }) {
 
   // 🔥 ODDIY PRODUCT (ID GA YO‘NALTIRADI)
   return (
-    <Link href={`/product/${product.id}`}>
+    <Link href={`/products/${product.id}`}>
       <div className="bg-white rounded-2xl shadow-md hover:shadow-2xl transition duration-300 overflow-hidden group cursor-pointer">
         
         {/* Image */}
