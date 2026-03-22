@@ -1,19 +1,5 @@
 "use client";
 
-export default function ProductCard({ product }) {
-  // Narx formatlash
-  const formatPrice = (price) => {
-    return price.toLocaleString("uz-UZ") + " so‘m";
-  };
-
-  // CTA CARD (Barcha mahsulotlar)
-  if (product.isMore) {
-    return (
-      <a
-        href="/products"
-        className="bg-white rounded-2xl shadow-md hover:shadow-2xl transition duration-300 overflow-hidden group block"
-"use client";
-
 import Link from "next/link";
 
 export default function ProductCard({ product }) {
