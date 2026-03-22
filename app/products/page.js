@@ -8,7 +8,7 @@ export default function ProductsPage() {
     <div className="min-h-screen bg-white">
       <Header />
       <main className="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl sm:text-4xl font-bold mb-6">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight mb-6 text-center">
           Barcha Maxsulotlar
         </h1>
 
