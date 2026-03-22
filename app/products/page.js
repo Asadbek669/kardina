@@ -1,9 +1,18 @@
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+"use client";
+
+import { useRouter } from "next/navigation";
 import ProductCard from "../components/ProductCard";
 import { products } from "../data";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 export default function ProductsPage() {
+  const router = useRouter();
+
+  const handleClick = (id) => {
+    router.push(`/products/${id}`);
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <Header />
@@ -12,10 +21,15 @@ export default function ProductsPage() {
           Barcha Maxsulotlar
         </h1>
 
-        {/* Responsive Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <div
+              key={product.id}
+              onClick={() => handleClick(product.id)}
+              className="cursor-pointer"
+            >
+              <ProductCard product={product} />
+            </div>
           ))}
         </div>
       </main>
