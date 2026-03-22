@@ -12,8 +12,22 @@ export default function ProductCard({ product }) {
       <a
         href="/products"
         className="bg-white rounded-2xl shadow-md hover:shadow-2xl transition duration-300 overflow-hidden group block"
+"use client";
+
+import Link from "next/link";
+
+export default function ProductCard({ product }) {
+  const formatPrice = (price) =>
+    price.toLocaleString("uz-UZ") + " so‘m";
+
+  // CTA CARD
+  if (product.isMore) {
+    return (
+      <a
+        href="/products"
+        className="bg-white rounded-2xl shadow-md hover:shadow-2xl transition duration-300 overflow-hidden group block"
       >
-        {/* Upper Image + Gradient */}
+        {/* o‘zgarmaydi */}
         <div
           className="w-full aspect-square flex items-center justify-center text-white relative"
           style={{
@@ -24,16 +38,13 @@ export default function ProductCard({ product }) {
           }}
         >
           <div className="text-center z-10">
-            <div className="text-5xl mb-2 group-hover:translate-x-1 transition-transform">
-              ➜
-            </div>
+            <div className="text-5xl mb-2">➜</div>
             <p className="text-sm opacity-80 truncate">
               Yana ko‘p mahsulotlar
             </p>
           </div>
         </div>
 
-        {/* Card Content */}
         <div className="p-4">
           <h2 className="text-lg font-semibold text-gray-800 truncate">
             Barcha mahsulotlar
@@ -43,9 +54,7 @@ export default function ProductCard({ product }) {
             Yana ko‘plab mahsulotlarni ko‘rish uchun bosing
           </p>
 
-          <p className="mt-2 text-blue-600 font-bold text-lg">→</p>
-
-          <div className="mt-4 w-full bg-[#081537] text-white py-2 rounded-xl text-center hover:bg-blue-700 transition">
+          <div className="mt-4 w-full bg-[#081537] text-white py-2 rounded-xl text-center">
             Ko‘rish
           </div>
         </div>
@@ -53,46 +62,50 @@ export default function ProductCard({ product }) {
     );
   }
 
-  // ODDIY PRODUCT CARD
+  // 🔥 ODDIY PRODUCT (ID GA YO‘NALTIRADI)
   return (
-    <div className="bg-white rounded-2xl shadow-md hover:shadow-2xl transition duration-300 overflow-hidden group">
-      
-      {/* Image */}
-      <div className="w-full aspect-square overflow-hidden relative">
-        <img
-          src={product.image}
-          alt={product.title}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-        />
+    <Link href={`/product/${product.id}`}>
+      <div className="bg-white rounded-2xl shadow-md hover:shadow-2xl transition duration-300 overflow-hidden group cursor-pointer">
+        
+        {/* Image */}
+        <div className="w-full aspect-square overflow-hidden relative">
+          <img
+            src={product.image}
+            alt={product.title}
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+          />
 
-        {/* Category */}
-        <span className="absolute top-3 left-3 bg-[#081537] text-white text-xs px-3 py-1 rounded-full shadow">
-          {product.category}
-        </span>
+          <span className="absolute top-3 left-3 bg-[#081537] text-white text-xs px-3 py-1 rounded-full shadow">
+            {product.category}
+          </span>
+        </div>
+
+        {/* Content */}
+        <div className="p-4">
+          <h2 className="text-lg font-semibold text-gray-800 truncate">
+            {product.title}
+          </h2>
+
+          <p className="text-sm text-gray-500 mt-1 truncate">
+            {product.description}
+          </p>
+
+          <p className="mt-2 text-blue-600 font-bold text-lg">
+            {formatPrice(product.price)}
+          </p>
+
+          {/* ❗ button bosilganda link ishlamasin */}
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              console.log("Savatga qo‘shildi");
+            }}
+            className="mt-4 w-full bg-[#081537] text-white py-2 rounded-xl"
+          >
+            🛒 Savatga
+          </button>
+        </div>
       </div>
-
-      {/* Content */}
-      <div className="p-4">
-        {/* Title */}
-        <h2 className="text-lg font-semibold text-gray-800 truncate">
-          {product.title}
-        </h2>
-
-        {/* 1 QATOR DESCRIPTION */}
-        <p className="text-sm text-gray-500 mt-1 truncate">
-          {product.description}
-        </p>
-
-        {/* Price */}
-        <p className="mt-2 text-blue-600 font-bold text-lg">
-          {formatPrice(product.price)}
-        </p>
-
-        {/* Button */}
-        <button className="mt-4 w-full bg-[#081537] text-white py-2 rounded-xl hover:bg-blue-700 active:scale-95 transition-transform">
-          🛒 Savatga
-        </button>
-      </div>
-    </div>
+    </Link>
   );
 }
