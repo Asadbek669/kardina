@@ -22,27 +22,34 @@ export async function POST(req) {
       );
     }
 
-    // Buyurtma matni tayyorlash
-    const orderText = cart
-      .map(
-        (item) =>
-          `${item.title} (${item.quantity} x ${item.price.toLocaleString(
-            "uz-UZ"
-          )} so'm)`
-      )
-      .join("\n");
+    // Sana va vaqt
+    const now = new Date();
+    const dateStr = now.toLocaleDateString("uz-UZ"); // Yil/oy/kun
+    const timeStr = now.toLocaleTimeString("uz-UZ"); // Soat:minut:sekund
 
-    const message = `📦 Yangi buyurtma:\n${orderText}\n📱 Telefon: ${phone}`;
+    // Buyurtma matni (tartibli)
+    let totalSum = 0;
+    const orderLines = cart.map((item, index) => {
+      const lineTotal = item.price * item.quantity;
+      totalSum += lineTotal;
+      return `${index + 1}. ${item.title} — ${item.quantity} x ${item.price.toLocaleString("uz-UZ")} so'm = ${lineTotal.toLocaleString("uz-UZ")} so'm`;
+    });
 
-    // Telegramga yuborish
+    const orderText = orderLines.join("\n");
+
+    // Umumiy summa alohida
+    const totalText = `💰 Umumiy summa: ${totalSum.toLocaleString("uz-UZ")} so'm`;
+
+    // Xabar Telegramga
+    const message = `📦 Yangi buyurtma\n📅 Sana: ${dateStr}\n⏰ Vaqt: ${timeStr}\n\n${orderText}\n\n${totalText}`;
+
+    // Telegramga yuborish (buyurtma)
     const telegramResp = await fetch(
-      `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(
-        message
-      )}`,
-      { method: "GET" } // GET ishlatiladi, GET yoki POST ikkalasi ishlaydi
+      `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`,
+      { method: "GET" }
     );
 
-    const telegramData = await telegramResp.json(); // Telegramdan kelgan javob
+    const telegramData = await telegramResp.json();
 
     if (!telegramResp.ok) {
       console.error("Telegram xatolik:", telegramData);
@@ -52,8 +59,16 @@ export async function POST(req) {
       );
     }
 
+    // Telefon raqamini alohida yuborish
+    const phoneMessage = `📱 Telefon raqami: ${phone}`;
+    await fetch(
+      `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(phoneMessage)}`,
+      { method: "GET" }
+    );
+
     // Muvaffaqiyatli yuborish
     return new Response(JSON.stringify({ success: true }), { status: 200 });
+
   } catch (err) {
     console.error("API xatolik:", err);
     return new Response(
